@@ -22,7 +22,6 @@ namespace LibrarySystem.Controls
     /// </summary>
     public partial class SuggestTextBox : UserControl
     {
-        private static Type _type;
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected",
                 typeof(object),
@@ -42,10 +41,11 @@ namespace LibrarySystem.Controls
                 typeof(SuggestTextBox),
                 new PropertyMetadata(null));
 
-        public static readonly DependencyProperty ValueMemberProperty =
-            DependencyProperty.Register("ValueMember",
-                typeof(object),
-                typeof(SuggestTextBox));
+        public static readonly DependencyProperty AutoCompleteProperty =
+            DependencyProperty.Register("AutoComplete",
+                typeof(bool),
+                typeof(SuggestTextBox),
+                new PropertyMetadata(false));
 
         public static readonly DependencyProperty ValueMemberPathProperty =
             DependencyProperty.Register("ValueMemberPath",
@@ -68,10 +68,10 @@ namespace LibrarySystem.Controls
             get => GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
         }
-        public object ValueMember
+        public object AutoComplete
         {
-            get => GetValue(ValueMemberProperty);
-            set => SetValue(ValueMemberProperty, value);
+            get => GetValue(AutoCompleteProperty);
+            set => SetValue(AutoCompleteProperty, value);
         }
         public object ValueMemberPath
         {

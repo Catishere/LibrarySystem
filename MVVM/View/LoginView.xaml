@@ -49,7 +49,11 @@
                 Grid.Row="2" 
                 TextWrapping="NoWrap" 
                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                Height="40" Width="250"/>
+                Height="40" Width="250">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"></KeyBinding>
+            </TextBox.InputBindings>
+        </TextBox>
         <Label 
                 Content="Потребител:" 
                 Grid.Column="1" 

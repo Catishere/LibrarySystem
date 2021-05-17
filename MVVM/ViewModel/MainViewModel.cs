@@ -19,6 +19,8 @@ namespace LibrarySystem.MVVM.ViewModel
         private List<Book> _suggestions;
         private IViewModel _currentViewModelParent;
         private readonly UserService _userService;
+        private bool _autoComplete = true;
+
         public ICommand HomeCommand { get; set; }
         public ICommand LibraryCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
@@ -39,6 +41,12 @@ namespace LibrarySystem.MVVM.ViewModel
                 _suggestionEntry = value;
                 if (_suggestionEntry != null && !IsCycling)
                     Suggestions = _allSuggestions.Where(s => s.Title.ToLower().Contains(_suggestionEntry.Title.ToLower())).ToList();
+                if (_autoComplete
+                    && Suggestions != null
+                    && Suggestions.Any()
+                    && _suggestionEntry != null
+                    && _suggestionEntry.Title.Length >= 4)
+                    _suggestionEntry = Suggestions.First();
                 OnPropertyChanged();
             }
         }

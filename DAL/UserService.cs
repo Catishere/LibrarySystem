@@ -48,6 +48,13 @@ namespace LibrarySystem.DAL
             return query.ToList();
         }
 
+        public List<Book> GetFavouritePasswords()
+        {
+            int userId = UserInfo.CurrentUser.UserId;
+            var query = _userRepository.GetAll().Where(c => c.UserId == userId).SelectMany(c => c.FavouriteBooks);
+            return query.ToList();
+        }
+
         public void Register(string loginUsername, string password)
         {
             _userRepository.Insert(new User(loginUsername, loginUsername, Cryptography.EncodePassword(password)));
