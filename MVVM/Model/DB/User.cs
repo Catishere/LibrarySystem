@@ -16,6 +16,7 @@ namespace LibrarySystem.MVVM.Model.DB
         public string? DisplayName { get; set; }
         public string Password { get; set; }
         public List<Book> FavouriteBooks { get; set; }
+        public List<Password> FavouritePasswords { get; set; }
 
         public User(string username, string? displayName, string password)
         {
@@ -23,12 +24,14 @@ namespace LibrarySystem.MVVM.Model.DB
             DisplayName = displayName;
             Password = password;
             FavouriteBooks = new List<Book>();
+            FavouritePasswords = new List<Password>();
         }
 #nullable disable
 
         public User()
         {
             FavouriteBooks = new List<Book>();
+            FavouritePasswords = new List<Password>();
         }
     }
 }

@@ -14,11 +14,13 @@
         <Grid>
             <ComboBox Style="{StaticResource CustomComboBox}"
                 ItemsSource="{Binding Path=Items, ElementName=Control}"
-                DisplayMemberPath="{Binding ValueMemberPath, ElementName=Control}"
+                DisplayMemberPath="{Binding ValueMember.Value, ElementName=Control}"
                 SelectedItem="{Binding Path=Selected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ElementName=Control}"
                 Foreground="Gray"
                 Background="Transparent" 
                 BorderBrush="Transparent"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Center"
                 x:Name="ComboBox">
             </ComboBox>
             <Rectangle StrokeThickness="1"/>
@@ -46,7 +48,7 @@
                         UpdateSourceTrigger=PropertyChanged,             
                         ElementName=Control}"
                         Converter="{StaticResource ObjectPathConverter}"
-                        ConverterParameter="{Binding ValueMemberPath, ElementName=Control}"/>
+                        ConverterParameter="{Binding ValueMember, ElementName=Control}"/>
                 </TextBox.Text>
             </TextBox>
             <TextBlock IsHitTestVisible="False"

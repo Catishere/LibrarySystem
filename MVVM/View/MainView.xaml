@@ -51,7 +51,7 @@
         </StackPanel>
         <controls:SuggestTextBox
                 Items="{Binding Suggestions}"
-                ValueMemberPath="Title"
+                ValueMember="{Binding ItemKeyPair}"
                 Placeholder="Търсене"
                 Text="{Binding SuggestionEntry, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                 FontSize="18"

@@ -78,8 +78,10 @@
     <Compile Include="Converter\ObjectPathConverter.cs" />
     <Compile Include="DAL\LibraryContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MVVM\Model\DB\Password.cs" />
     <Compile Include="MVVM\ViewModel\Command\CycleSuggestionCommand.cs" />
     <Compile Include="MVVM\ViewModel\Command\LoginCommand.cs" />
+    <Compile Include="MVVM\ViewModel\IViewModelSuggestions.cs" />
     <Compile Include="MVVM\ViewModel\LoginViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Command\RegisterCommand.cs" />
     <Compile Include="MVVM\View\LoginView.xaml.cs">

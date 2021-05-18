@@ -22,6 +22,17 @@ namespace LibrarySystem.Controls
     /// </summary>
     public partial class SuggestTextBox : UserControl
     {
+        public static readonly DependencyProperty ItemsProperty =
+            DependencyProperty.Register("Items",
+                typeof(IEnumerable<object>),
+                typeof(SuggestTextBox),
+                new PropertyMetadata(null));
+        
+        public static readonly DependencyProperty ValueMemberProperty =
+            DependencyProperty.Register("ValueMember",
+                typeof(KeyValuePair<Type, string>),
+                typeof(SuggestTextBox));
+
         public static readonly DependencyProperty SelectedProperty =
             DependencyProperty.Register("Selected",
                 typeof(object),
@@ -47,29 +58,6 @@ namespace LibrarySystem.Controls
                 typeof(SuggestTextBox),
                 new PropertyMetadata(false));
 
-        public static readonly DependencyProperty ValueTypeProperty =
-            DependencyProperty.Register("ValueType",
-                typeof(Type),
-                typeof(SuggestTextBox));
-
-        public static readonly DependencyProperty ValueMemberPathProperty =
-            DependencyProperty.Register("ValueMemberPath",
-                typeof(object),
-                typeof(SuggestTextBox));
-
-        public static readonly DependencyProperty ItemsProperty = 
-            DependencyProperty.Register("Items",
-                typeof(IEnumerable<object>),
-                typeof(SuggestTextBox),
-                new PropertyMetadata(OnItems));
-
-        private static void OnItems(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var element = ((IEnumerable<object>)e.NewValue).FirstOrDefault();
-            if (element != null)
-                d.SetValue(ValueTypeProperty, element.GetType());
-        }
-
         public static readonly DependencyProperty PlaceholderProperty =
             DependencyProperty.Register("Placeholder",
                 typeof(object),
@@ -86,15 +74,11 @@ namespace LibrarySystem.Controls
             get => GetValue(AutoCompleteProperty);
             set => SetValue(AutoCompleteProperty, value);
         }
-        public object ValueType
+
+        public object ValueMember
         {
-            get => GetValue(ValueTypeProperty);
-            set => SetValue(ValueTypeProperty, value);
-        }
-        public object ValueMemberPath
-        {
-            get => GetValue(ValueMemberPathProperty);
-            set => SetValue(ValueMemberPathProperty, value);
+            get => GetValue(ValueMemberProperty);
+            set => SetValue(ValueMemberProperty, value);
         }
         public object Selected
         {

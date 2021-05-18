@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using LibrarySystem.MVVM.ViewModel.Command;
 
 namespace LibrarySystem.MVVM.ViewModel
 {
-    public class MainViewModel : ObservableObject, IViewModel
+    public class MainViewModel : ObservableObject, IViewModelSuggestions
     {
         private IViewModel _currentViewModel;
 
@@ -20,6 +21,7 @@ namespace LibrarySystem.MVVM.ViewModel
         private IViewModel _currentViewModelParent;
         private readonly UserService _userService;
         private bool _autoComplete = true;
+        private KeyValuePair<Type, string> _itemKeyPair;
 
         public ICommand HomeCommand { get; set; }
         public ICommand LibraryCommand { get; set; }
@@ -27,6 +29,17 @@ namespace LibrarySystem.MVVM.ViewModel
         public ICommand CycleSuggestionCommand { get; set; }
 
         public int SuggestionIndex { get; set; } = -1;
+        public bool IsCycling { get; set; }
+
+        public KeyValuePair<Type, string> ItemKeyPair
+        {
+            get => _itemKeyPair;
+            set
+            {
+                _itemKeyPair = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Book SuggestionEntry
         {
@@ -50,8 +63,6 @@ namespace LibrarySystem.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public bool IsCycling { get; set; }
 
         public List<Book> Suggestions
         {
@@ -93,7 +104,21 @@ namespace LibrarySystem.MVVM.ViewModel
             LibraryCommand = new NavigationCommand<LibraryViewModel>(this);
             SettingsCommand = new NavigationCommand<SettingsViewModel>(this);
             _allSuggestions = _userService.GetFavouriteBooks();
+            if (_allSuggestions.Any())
+                ItemKeyPair = new KeyValuePair<Type, string>(_allSuggestions.First().GetType(), "Title");
             CycleSuggestionCommand = new CycleSuggestionCommand(this);
+        }
+
+        public void ExecuteCycleSuggestions(object parameter)
+        {
+            if (!Suggestions.Any()) return;
+            int index = SuggestionIndex + int.Parse((string)parameter);
+            index = index % Math.Min(5, Suggestions.Count);
+            IsCycling = true;
+            if (index < 0)
+                index = Suggestions.Count - 1;
+            SuggestionEntry = Suggestions[index];
+            SuggestionIndex = index;
         }
     }
 }

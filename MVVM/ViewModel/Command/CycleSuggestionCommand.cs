@@ -7,8 +7,8 @@ namespace LibrarySystem.MVVM.ViewModel.Command
 {
     public class CycleSuggestionCommand : ICommand
     {
-        private readonly MainViewModel _viewModel;
-        public CycleSuggestionCommand(MainViewModel viewModel)
+        private readonly IViewModelSuggestions _viewModel;
+        public CycleSuggestionCommand(IViewModelSuggestions viewModel)
         {
             _viewModel = viewModel;
         }
@@ -20,14 +20,7 @@ namespace LibrarySystem.MVVM.ViewModel.Command
 
         public void Execute(object parameter)
         {
-            if (!_viewModel.Suggestions.Any()) return;
-            int index = _viewModel.SuggestionIndex + int.Parse((string)parameter);
-            index = index % Math.Min(5, _viewModel.Suggestions.Count);
-            _viewModel.IsCycling = true;
-            if (index < 0)
-                index = _viewModel.Suggestions.Count - 1;
-            _viewModel.SuggestionEntry = _viewModel.Suggestions[index];
-            _viewModel.SuggestionIndex = index;
+            _viewModel.ExecuteCycleSuggestions(parameter);
         }
 
         public event EventHandler CanExecuteChanged

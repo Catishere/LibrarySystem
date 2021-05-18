@@ -6,44 +6,88 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using LibrarySystem.Core;
+using LibrarySystem.DAL;
+using LibrarySystem.MVVM.ViewModel.Command;
 
 namespace LibrarySystem.MVVM.ViewModel
 {
-    public class LibraryViewModel : ObservableObject, IViewModel
+    public class LibraryViewModel : ObservableObject, IViewModelSuggestions
     {
-        private string _suggestionEntry;
-        private readonly List<string> _allSuggestions;
-        private List<string> _suggestions;
+        private string _passwordEntry;
+        private List<string> _allPasswords;
+        private List<string> _passwords;
         private IViewModel _currentViewModel;
         private IViewModel _currentViewModelParent;
+        private KeyValuePair<Type, string> _itemKeyPair;
 
-        public string SuggestionEntry
+        public ICommand CycleSuggestionCommand { get; set; }
+        public int SuggestionIndex { get; set; } = -1;
+        public bool IsCycling { get; set; }
+
+        public void ExecuteCycleSuggestions(object parameter)
         {
-            get => _suggestionEntry;
+            if (!Passwords.Any()) return;
+            int index = SuggestionIndex + int.Parse((string)parameter);
+            index = index % Math.Min(5, Passwords.Count);
+            IsCycling = true;
+            if (index < 0)
+                index = Passwords.Count - 1;
+            PasswordEntry = Passwords[index];
+            SuggestionIndex = index;
+        }
+
+        public KeyValuePair<Type, string> ItemKeyPair
+        {
+            get => _itemKeyPair;
             set
             {
-                _suggestionEntry = value;
-                if (_suggestionEntry != null)
-                    Suggestions = _allSuggestions.Where(s => s.ToLower().Contains(_suggestionEntry.ToLower())).ToList();
+                _itemKeyPair = value;
                 OnPropertyChanged();
             }
         }
 
-        public List<string> Suggestions
+        public string PasswordEntry
         {
-            get => _suggestions;
+            get => _passwordEntry;
             set
             {
-                _suggestions = value;
+                _passwordEntry = value;
+                if (_passwordEntry != null)
+                    Passwords = _allPasswords.Where(s => s.ToLower().Contains(_passwordEntry.ToLower())).ToList();
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> Passwords
+        {
+            get => _passwords;
+            set
+            {
+                _passwords = value;
+                OnPropertyChanged();
+            }
+        }
+        public List<string> AllPasswords
+        {
+            get => _allPasswords;
+            set
+            {
+                _allPasswords = value;
                 OnPropertyChanged();
             }
         }
 
         public LibraryViewModel()
         {
-            _allSuggestions = new List<string> {"Football", "Basketball", "Softball", "Rugby", "Hockey"};
-            _suggestions = new List<string>();
+            var libraryContext = new LibraryContext();
+            var _userService = new UserService(new UserRepository(libraryContext), new BookRepository(libraryContext));
+            _allPasswords = _userService.GetFavouritePasswords();
+            _passwords = new List<string>();
+            if (_allPasswords.Any())
+                ItemKeyPair = new KeyValuePair<Type, string>(_allPasswords.First().GetType(), "");
+            CycleSuggestionCommand = new CycleSuggestionCommand(this);
         }
 
         public IViewModel CurrentViewModel

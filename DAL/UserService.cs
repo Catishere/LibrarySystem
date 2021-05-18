@@ -41,18 +41,26 @@ namespace LibrarySystem.DAL
             _userRepository.Save();
         }
 
+        public void AddFavouritePassword(string password)
+        {
+            var user = _userRepository.GetById(UserInfo.CurrentUser.UserId);
+            user?.FavouritePasswords.Add(new Password(Cryptography.Encrypt(password, UserInfo.CurrentUser.Password)));
+            _userRepository.Update(user);
+            _userRepository.Save();
+        }
+
         public List<Book> GetFavouriteBooks()
         {
             int userId = UserInfo.CurrentUser.UserId;
-            var query = _userRepository.GetAll().Where(c => c.UserId == userId).SelectMany(c => c.FavouriteBooks);
+            var query = _userRepository.GetAll().Where(u => u.UserId == userId).SelectMany(u => u.FavouriteBooks);
             return query.ToList();
         }
 
-        public List<Book> GetFavouritePasswords()
+        public List<string> GetFavouritePasswords()
         {
             int userId = UserInfo.CurrentUser.UserId;
-            var query = _userRepository.GetAll().Where(c => c.UserId == userId).SelectMany(c => c.FavouriteBooks);
-            return query.ToList();
+            var query = _userRepository.GetAll().Where(u => u.UserId == userId).SelectMany(u => u.FavouritePasswords);
+            return query.ToList().ConvertAll(input => Cryptography.Decrypt(input.PasswordString, UserInfo.CurrentUser.Password));
         }
 
         public void Register(string loginUsername, string password)

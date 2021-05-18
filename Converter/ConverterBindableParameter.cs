@@ -48,6 +48,7 @@ namespace LibrarySystem.Converter
                 multiBinding.UpdateSourceTrigger = Binding.UpdateSourceTrigger;
                 multiBinding.Bindings.Add(ConverterParameter);
             }
+
             var adapter = new MultiValueConverterAdapter
             {
                 Converter = Converter
