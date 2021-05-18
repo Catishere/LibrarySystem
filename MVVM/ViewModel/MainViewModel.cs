@@ -46,15 +46,19 @@ namespace LibrarySystem.MVVM.ViewModel
             get => _suggestionEntry;
             set
             {
-                if (!_allSuggestions.Contains(value) && IsCycling 
-                    || Suggestions == null 
+                if (!_allSuggestions.Contains(value) && IsCycling
+                    || Suggestions == null
                     || !Suggestions.Any())
+                {
                     IsCycling = false;
+                    SuggestionIndex = -1;
+                }
 
                 _suggestionEntry = value;
                 if (_suggestionEntry != null && !IsCycling)
                     Suggestions = _allSuggestions.Where(s => s.Title.ToLower().Contains(_suggestionEntry.Title.ToLower())).ToList();
                 if (_autoComplete
+                    && !IsCycling
                     && Suggestions != null
                     && Suggestions.Any()
                     && _suggestionEntry != null

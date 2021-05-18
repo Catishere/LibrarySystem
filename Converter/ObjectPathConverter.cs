@@ -17,6 +17,7 @@ namespace LibrarySystem.Converter
         {
             if (parameter is not KeyValuePair<Type, string> member) return string.Empty;
             if (value == null) return string.Empty;
+            if (member.Key == null || member.Value == null) return string.Empty;
             if (member.Key.Name == "String") return value;
             return value.GetType().GetProperty(member.Value).GetValue(value);
         }
@@ -26,7 +27,7 @@ namespace LibrarySystem.Converter
             if (value is not string member) return null;
             if (parameter == null) return value;
             if (parameter is not KeyValuePair<Type, string> field) return null;
-            if (field.Key == null) return null;
+            if (field.Key == null || field.Value == null) return null;
             if (field.Key.Name == "String") return value;
             object obj = Activator.CreateInstance(field.Key);
             PropertyInfo propertyInfo = obj.GetType().GetProperty(field.Value);

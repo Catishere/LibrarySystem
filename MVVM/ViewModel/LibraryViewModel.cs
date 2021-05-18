@@ -53,8 +53,15 @@ namespace LibrarySystem.MVVM.ViewModel
             get => _passwordEntry;
             set
             {
+                if (!_allPasswords.Contains(value) && IsCycling
+                    || Passwords == null
+                    || !Passwords.Any())
+                {
+                    IsCycling = false;
+                    SuggestionIndex = -1;
+                }
                 _passwordEntry = value;
-                if (_passwordEntry != null)
+                if (_passwordEntry != null && !IsCycling)
                     Passwords = _allPasswords.Where(s => s.ToLower().Contains(_passwordEntry.ToLower())).ToList();
                 OnPropertyChanged();
             }
