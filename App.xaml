@@ -9,6 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
 
+            <converter:ConverterBindableParameter x:Key="ConverterBindableParameter"/>
             <converter:ObjectPathConverter x:Key="ObjectPathConverter"/>
             <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
                 <view:HomeView/>

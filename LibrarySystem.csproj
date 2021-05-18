@@ -72,6 +72,7 @@
       <DependentUpon>SuggestTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\ClearConverter.cs" />
+    <Compile Include="Converter\ConverterBindableParameter.cs" />
     <Compile Include="Converter\IsZeroConverter.cs" />
     <Compile Include="Converter\LengthConverter.cs" />
     <Compile Include="Converter\ObjectPathConverter.cs" />

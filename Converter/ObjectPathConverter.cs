@@ -14,9 +14,9 @@ namespace LibrarySystem.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is not Book book) return "";
+            if (parameter == null) return value;
             if (parameter is not string member) return "";
-            return book.GetType().GetProperty(member).GetValue(book);
+            return value.GetType().GetProperty(member).GetValue(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

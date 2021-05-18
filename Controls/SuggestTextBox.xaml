@@ -22,13 +22,13 @@
                 x:Name="ComboBox">
             </ComboBox>
             <Rectangle StrokeThickness="1"/>
-            <TextBox
-                Text="{Binding ElementName=Control, 
+            <!--Text="{Binding ElementName=Control, 
                     UpdateSourceTrigger=PropertyChanged,
                     Mode=TwoWay,
                     Path=Text,
                     Converter={StaticResource ObjectPathConverter},
-                    ConverterParameter=Title}"
+                    ConverterParameter=Title}"-->
+            <TextBox
                 Margin="1"
                 BorderThickness="0"
                 Background="Transparent"
@@ -40,6 +40,14 @@
                     <KeyBinding Key="Tab" Command="{Binding CycleSuggestionCommand}" CommandParameter="1"/>
                     <KeyBinding Modifiers="Shift" Key="Tab" Command="{Binding CycleSuggestionCommand}" CommandParameter="-1"/>
                 </TextBox.InputBindings>
+                <TextBox.Text>
+                    <converter:ConverterBindableParameter 
+                        Binding="{Binding Text,
+                        UpdateSourceTrigger=PropertyChanged,             
+                        ElementName=Control}"
+                        Converter="{StaticResource ObjectPathConverter}"
+                        ConverterParameter="{Binding ValueMemberPath, ElementName=Control}"/>
+                </TextBox.Text>
             </TextBox>
             <TextBlock IsHitTestVisible="False"
                 Text="{Binding Path=Placeholder, ElementName=Control}"

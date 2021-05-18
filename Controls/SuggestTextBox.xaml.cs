@@ -47,6 +47,11 @@ namespace LibrarySystem.Controls
                 typeof(SuggestTextBox),
                 new PropertyMetadata(false));
 
+        public static readonly DependencyProperty ValueTypeProperty =
+            DependencyProperty.Register("ValueType",
+                typeof(Type),
+                typeof(SuggestTextBox));
+
         public static readonly DependencyProperty ValueMemberPathProperty =
             DependencyProperty.Register("ValueMemberPath",
                 typeof(object),
@@ -54,8 +59,16 @@ namespace LibrarySystem.Controls
 
         public static readonly DependencyProperty ItemsProperty = 
             DependencyProperty.Register("Items",
-                typeof(object),
-                typeof(SuggestTextBox));
+                typeof(IEnumerable<object>),
+                typeof(SuggestTextBox),
+                new PropertyMetadata(OnItems));
+
+        private static void OnItems(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var element = ((IEnumerable<object>)e.NewValue).FirstOrDefault();
+            if (element != null)
+                d.SetValue(ValueTypeProperty, element.GetType());
+        }
 
         public static readonly DependencyProperty PlaceholderProperty =
             DependencyProperty.Register("Placeholder",
@@ -72,6 +85,11 @@ namespace LibrarySystem.Controls
         {
             get => GetValue(AutoCompleteProperty);
             set => SetValue(AutoCompleteProperty, value);
+        }
+        public object ValueType
+        {
+            get => GetValue(ValueTypeProperty);
+            set => SetValue(ValueTypeProperty, value);
         }
         public object ValueMemberPath
         {
