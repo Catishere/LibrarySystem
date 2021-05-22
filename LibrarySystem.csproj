@@ -84,6 +84,7 @@
     <Compile Include="MVVM\ViewModel\IViewModelSuggestions.cs" />
     <Compile Include="MVVM\ViewModel\LoginViewModel.cs" />
     <Compile Include="MVVM\ViewModel\Command\RegisterCommand.cs" />
+    <Compile Include="MVVM\Model\UserLoginSuggestion.cs" />
     <Compile Include="MVVM\View\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -91,6 +92,7 @@
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Cryptography.cs" />
+    <Compile Include="Utils\SuggestionFileManager.cs" />
     <Compile Include="Utils\UserInfo.cs" />
     <Page Include="Controls\CustomComboBox.xaml">
       <SubType>Designer</SubType>

@@ -20,7 +20,7 @@ namespace LibrarySystem.MVVM.ViewModel
         private List<string> _passwords;
         private IViewModel _currentViewModel;
         private IViewModel _currentViewModelParent;
-        private KeyValuePair<Type, string> _itemKeyPair;
+        private KeyValuePair<object, string> _itemKeyPair;
 
         public ICommand CycleSuggestionCommand { get; set; }
         public int SuggestionIndex { get; set; } = -1;
@@ -38,7 +38,7 @@ namespace LibrarySystem.MVVM.ViewModel
             SuggestionIndex = index;
         }
 
-        public KeyValuePair<Type, string> ItemKeyPair
+        public KeyValuePair<object, string> ItemKeyPair
         {
             get => _itemKeyPair;
             set
@@ -92,8 +92,8 @@ namespace LibrarySystem.MVVM.ViewModel
             var _userService = new UserService(new UserRepository(libraryContext), new BookRepository(libraryContext));
             _allPasswords = _userService.GetFavouritePasswords();
             _passwords = new List<string>();
-            if (_allPasswords.Any())
-                ItemKeyPair = new KeyValuePair<Type, string>(_allPasswords.First().GetType(), "");
+            _passwordEntry = "";
+            ItemKeyPair = new KeyValuePair<object, string>(_passwordEntry, "");
             CycleSuggestionCommand = new CycleSuggestionCommand(this);
         }
 

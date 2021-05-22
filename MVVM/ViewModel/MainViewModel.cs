@@ -21,7 +21,7 @@ namespace LibrarySystem.MVVM.ViewModel
         private IViewModel _currentViewModelParent;
         private readonly UserService _userService;
         private bool _autoComplete = true;
-        private KeyValuePair<Type, string> _itemKeyPair;
+        private KeyValuePair<object, string> _itemKeyPair;
 
         public ICommand HomeCommand { get; set; }
         public ICommand LibraryCommand { get; set; }
@@ -31,7 +31,7 @@ namespace LibrarySystem.MVVM.ViewModel
         public int SuggestionIndex { get; set; } = -1;
         public bool IsCycling { get; set; }
 
-        public KeyValuePair<Type, string> ItemKeyPair
+        public KeyValuePair<object, string> ItemKeyPair
         {
             get => _itemKeyPair;
             set
@@ -108,8 +108,8 @@ namespace LibrarySystem.MVVM.ViewModel
             LibraryCommand = new NavigationCommand<LibraryViewModel>(this);
             SettingsCommand = new NavigationCommand<SettingsViewModel>(this);
             _allSuggestions = _userService.GetFavouriteBooks();
-            if (_allSuggestions.Any())
-                ItemKeyPair = new KeyValuePair<Type, string>(_allSuggestions.First().GetType(), "Title");
+            _suggestionEntry = new Book();
+            ItemKeyPair = new KeyValuePair<object, string>(_suggestionEntry, "Title");
             CycleSuggestionCommand = new CycleSuggestionCommand(this);
         }
 

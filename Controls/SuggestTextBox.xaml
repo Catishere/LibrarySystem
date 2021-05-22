@@ -24,15 +24,9 @@
                 x:Name="ComboBox">
             </ComboBox>
             <Rectangle StrokeThickness="1"/>
-            <!--Text="{Binding ElementName=Control, 
-                    UpdateSourceTrigger=PropertyChanged,
-                    Mode=TwoWay,
-                    Path=Text,
-                    Converter={StaticResource ObjectPathConverter},
-                    ConverterParameter=Title}"-->
             <TextBox
                 Margin="1"
-                BorderThickness="0"
+                BorderThickness="0" 
                 Background="Transparent"
                 VerticalAlignment="Stretch"
                 Padding="0"
@@ -51,6 +45,13 @@
                         ConverterParameter="{Binding ValueMember, ElementName=Control}"/>
                 </TextBox.Text>
             </TextBox>
+            <TextBlock IsHitTestVisible="False"
+                       Text="{Binding Path=AutoSuggest, ElementName=Control}"
+                       HorizontalAlignment="Left"
+                       Margin="2.7,0,0,0"
+                       FontSize="12"
+                       Foreground="DarkGray" VerticalAlignment="Center" Padding="0" Width="280">
+            </TextBlock>
             <TextBlock IsHitTestVisible="False"
                 Text="{Binding Path=Placeholder, ElementName=Control}"
                 HorizontalAlignment="Left"

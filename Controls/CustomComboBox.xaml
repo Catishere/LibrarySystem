@@ -202,6 +202,10 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
     <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>

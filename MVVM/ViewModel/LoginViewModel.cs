@@ -6,44 +6,50 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LibrarySystem.Core;
 using LibrarySystem.DAL;
+using LibrarySystem.MVVM.Model;
 using LibrarySystem.MVVM.ViewModel.Command;
+using LibrarySystem.Utils;
 
 namespace LibrarySystem.MVVM.ViewModel
 {
-    public class LoginViewModel : ObservableObject, IViewModel
+    public class LoginViewModel : ObservableObject, IViewModelSuggestions
     {
-        private string _username;
-        private string _password;
         private UserService _userService;
         private IViewModel _currentViewModel;
         private IViewModel _currentViewModelParent;
         private bool _hasError;
         private string _errorMessage;
+        private List<UserLoginSuggestion> _suggestions;
+        private List<UserLoginSuggestion> _allSuggestions;
+        private readonly SuggestionFileManager _suggestionFileManager;
+        private KeyValuePair<object, string> _userKeyPair;
+        private KeyValuePair<object, string> _passKeyPair;
+        private UserLoginSuggestion _suggestionEntry;
+        private string _bestSuggestionUsername;
+        private string _bestSuggestionPassword;
 
         public ICommand LoginCommand { get; set; }
         public ICommand RegisterCommand { get; set; }
-        public string Username
+
+        public KeyValuePair<object, string> UserKeyPair
         {
-            get => _username;
+            get => _userKeyPair;
             set
             {
-                HasError = false;
-                _username = value;
-                OnPropertyChanged(nameof(HasError));
+                _userKeyPair = value;
                 OnPropertyChanged();
             }
         }
-        public string Password
+        public KeyValuePair<object, string> PassKeyPair
         {
-            get => _password;
+            get => _passKeyPair;
             set
             {
-                HasError = false;
-                _password = value;
-                OnPropertyChanged(nameof(HasError));
+                _passKeyPair = value;
                 OnPropertyChanged();
             }
         }
+
 
         public string ErrorMessage
         {
@@ -67,6 +73,14 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public LoginViewModel()
         {
+            _suggestionFileManager = new SuggestionFileManager();
+            _allSuggestions = _suggestionFileManager.GetSuggestions();
+            SuggestionEntry = new UserLoginSuggestion();
+            Suggestions ??= new List<UserLoginSuggestion>();
+            UserKeyPair =
+                new KeyValuePair<object, string>(_suggestionEntry, "Username");
+            PassKeyPair =
+                new KeyValuePair<object, string>(_suggestionEntry, "Password");
             CurrentViewModelParent = this;
             CurrentViewModel = null;
             _userService = new UserService(new UserRepository(new LibraryContext()), null);
@@ -76,11 +90,14 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public bool CanExecute()
         {
-            return !string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password);
+            return SuggestionEntry != null
+                   && !string.IsNullOrEmpty(SuggestionEntry.Username) 
+                   && !string.IsNullOrEmpty(SuggestionEntry.Password);
         }
         public void Login(object parameter)
         {
-            if (_userService.Login(_username, _password)) {
+            if (_userService.Login(SuggestionEntry.Username, SuggestionEntry.Password)) {
+                _suggestionFileManager.AddSuggestion(new UserLoginSuggestion(SuggestionEntry.Username, SuggestionEntry.Password));
                 CurrentViewModelParent = new MainViewModel();
                 CurrentViewModel = new HomeViewModel();
             }
@@ -93,7 +110,7 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public void Register(object parameter)
         {
-            _userService.Register(_username, _password);
+            _userService.Register(SuggestionEntry.Username, SuggestionEntry.Password);
             CurrentViewModelParent = new MainViewModel();
             CurrentViewModel = new HomeViewModel();
         }
@@ -118,5 +135,63 @@ namespace LibrarySystem.MVVM.ViewModel
             }
         }
 
+        public ICommand CycleSuggestionCommand { get; set; }
+        public int SuggestionIndex { get; set; }
+        public bool IsCycling { get; set; }
+        public void ExecuteCycleSuggestions(object parameter)
+        {
+        }
+
+        public UserLoginSuggestion SuggestionEntry
+        {
+            get => _suggestionEntry;
+            set
+            {
+                _suggestionEntry = value;
+                if (_suggestionEntry != null)
+                {
+                    if (_suggestionEntry.Username != null)
+                        Suggestions = _allSuggestions.Where(s => s.Username.ToLower().Contains(_suggestionEntry.Username.ToLower())).ToList();
+                    if (_suggestionEntry.Password != null)
+                        Suggestions = _allSuggestions.Where(s => s.Password.ToLower().Contains(_suggestionEntry.Password.ToLower())).ToList();
+                }
+                
+                OnPropertyChanged();
+            }
+        }
+
+        public List<UserLoginSuggestion> Suggestions
+        {
+            get => _suggestions;
+            set
+            {
+                _suggestions = value;
+                OnPropertyChanged();
+                if (!_suggestions.Any()) return;
+                var first = _suggestions.First();
+                BestSuggestionUsername = SuggestionEntry?.Username?.Length >= 3 ? first.Username : string.Empty;
+                BestSuggestionPassword = SuggestionEntry?.Password?.Length >= 3 ? first.Password : string.Empty;
+            }
+        }
+
+        public string BestSuggestionPassword
+        {
+            get => _bestSuggestionPassword;
+            set
+            {
+                _bestSuggestionPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string BestSuggestionUsername
+        {
+            get => _bestSuggestionUsername;
+            set
+            {
+                _bestSuggestionUsername = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

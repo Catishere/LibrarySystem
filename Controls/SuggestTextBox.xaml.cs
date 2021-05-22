@@ -30,7 +30,7 @@ namespace LibrarySystem.Controls
         
         public static readonly DependencyProperty ValueMemberProperty =
             DependencyProperty.Register("ValueMember",
-                typeof(KeyValuePair<Type, string>),
+                typeof(KeyValuePair<object, string>),
                 typeof(SuggestTextBox));
 
         public static readonly DependencyProperty SelectedProperty =
@@ -63,6 +63,17 @@ namespace LibrarySystem.Controls
                 typeof(object),
                 typeof(SuggestTextBox),
                 new PropertyMetadata(0));
+
+        public static readonly DependencyProperty AutoSuggestProperty =
+            DependencyProperty.Register("AutoSuggest",
+                typeof(object),
+                typeof(SuggestTextBox),
+                new PropertyMetadata(string.Empty));
+        public object AutoSuggest
+        {
+            get => GetValue(AutoSuggestProperty);
+            set => SetValue(AutoSuggestProperty, value);
+        }
 
         public object Items
         {

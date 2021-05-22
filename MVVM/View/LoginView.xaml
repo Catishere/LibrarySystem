@@ -28,32 +28,32 @@
                        Foreground="White"
                        Margin="20,30,0,37" Height="30" Width="118"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="5"/>
-        <TextBox 
-                Style="{StaticResource TextBoxStylish}"
-                Name="Потребител"
-                Grid.Column="2" 
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Margin="10,3,0,4" 
-                Grid.Row="1" 
-                TextWrapping="NoWrap"
-                Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                Height="40" Width="250"/>
-        <TextBox 
-                Style="{StaticResource TextBoxStylish}"
-                Name="Парола"
-                Grid.Column="2" 
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Margin="10,5,0,5" 
-                Grid.Row="2" 
-                TextWrapping="NoWrap" 
-                Text="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                Height="40" Width="250">
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"></KeyBinding>
-            </TextBox.InputBindings>
-        </TextBox>
+        <controls:SuggestTextBox
+            Items="{Binding Suggestions}"
+            ValueMember="{Binding UserKeyPair}"
+            AutoSuggest="{Binding BestSuggestionUsername}"
+            Placeholder="Потребител"
+            Text="{Binding SuggestionEntry, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+            FontSize="12"
+            Grid.Column="2"
+            Grid.Row="1"
+            Margin="10,5,0,5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Width="250" Height="40"/>
+        <controls:SuggestTextBox
+            Items="{Binding Suggestions}"
+            ValueMember="{Binding PassKeyPair}"
+            AutoSuggest="{Binding BestSuggestionPassword}"
+            Placeholder="Парола"
+            Text="{Binding SuggestionEntry, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+            FontSize="12"
+            Grid.Column="2"
+            Grid.Row="2"
+            Margin="10,5,0,5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Width="250" Height="40"/>
         <Label 
                 Content="Потребител:" 
                 Grid.Column="1" 
