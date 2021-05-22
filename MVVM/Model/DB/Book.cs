@@ -22,11 +22,26 @@ namespace LibrarySystem.MVVM.Model.DB
         public int Year { get; set; }
         public int Edition { get; set; }
         public List<User> FavouriteOf { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
 #nullable disable
 
         public Book()
         {
             FavouriteOf = new List<User>();
+        }
+        
+        public void Copy(Book book)
+        {
+            Title = book.Title;
+            Authors = book.Authors;
+            Publisher = book.Publisher;
+            Isbn = book.Isbn;
+            Summary = book.Summary;
+            Genres = book.Genres;
+            Language = book.Language;
+            Year = book.Year;
+            Edition = book.Edition;
         }
     }
 }

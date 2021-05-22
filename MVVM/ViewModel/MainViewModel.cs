@@ -8,6 +8,7 @@ using LibrarySystem.Core;
 using LibrarySystem.DAL;
 using LibrarySystem.MVVM.Model.DB;
 using LibrarySystem.MVVM.ViewModel.Command;
+using LibrarySystem.Utils;
 
 namespace LibrarySystem.MVVM.ViewModel
 {
@@ -56,7 +57,12 @@ namespace LibrarySystem.MVVM.ViewModel
 
                 _suggestionEntry = value;
                 if (_suggestionEntry != null && !IsCycling)
-                    Suggestions = _allSuggestions.Where(s => s.Title.ToLower().Contains(_suggestionEntry.Title.ToLower())).ToList();
+                    Suggestions = _allSuggestions
+                        .Where(s => s.Title.ToLower()
+                            .Contains(_suggestionEntry.Title.ToLower()))
+                        .Take(UserInfo.CurrentUser.Settings.SuggestionsCount > 0 ? UserInfo.CurrentUser.Settings.SuggestionsCount : 5)
+                        .ToList();
+
                 if (_autoComplete
                     && !IsCycling
                     && Suggestions != null

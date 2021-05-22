@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -23,8 +24,10 @@ namespace LibrarySystem.DAL
         }
         public bool Login(string username, string password)
         {
-            var users = _userRepository.Get(x => x.Username == username);
-            var user = users.Any() ? users.First() : null;
+            var user = _userRepository.GetAll()
+                .Where(u => u.Username == username)
+                .Include("Settings")
+                .FirstOrDefault();
             UserInfo.CurrentUser = user;
             return user != null && user.Password.Equals(Cryptography.EncodePassword(password));
         }
@@ -62,6 +65,16 @@ namespace LibrarySystem.DAL
             var query = _userRepository.GetAll().Where(u => u.UserId == userId).SelectMany(u => u.FavouritePasswords);
             return query.ToList().ConvertAll(input => Cryptography.Decrypt(input.PasswordString, UserInfo.CurrentUser.Password));
         }
+
+        public bool UpdateUserSettings(int userId, Settings settings)
+        {
+            var user = _userRepository.GetById(userId);
+            if (user == null) return false;
+            user.Settings = settings;
+            _userRepository.Update(user);
+            _userRepository.Save();
+            return true;
+        } 
 
         public void Register(string loginUsername, string password)
         {

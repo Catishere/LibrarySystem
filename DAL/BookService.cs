@@ -20,14 +20,23 @@ namespace LibrarySystem.DAL
             _bookRepository = bookRepository;
         }
 
-        public bool Login(string username, SecureString password)
+        public void AddBook(Book book)
         {
-            return true;
+            book.CreatedOn = DateTime.Now;
+            book.ModifiedOn = DateTime.Now;
+            _bookRepository.Insert(book);
+            _bookRepository.Save();
         }
 
-        public void Register(string loginUsername, SecureString loginSecurePassword)
+        public bool EditBook(Book book)
         {
+            var bookdb = _bookRepository.GetById(book.BookId);
+            if (bookdb == null) return false;
+            bookdb.Copy(book);
+            bookdb.ModifiedOn = DateTime.Now;
+            _bookRepository.Update(bookdb);
             _bookRepository.Save();
+            return true;
         }
     }
 }
