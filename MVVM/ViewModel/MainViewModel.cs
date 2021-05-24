@@ -59,7 +59,9 @@ namespace LibrarySystem.MVVM.ViewModel
                 if (_suggestionEntry != null && !IsCycling)
                     Suggestions = _allSuggestions
                         .Where(s => s.Title.ToLower()
-                            .Contains(_suggestionEntry.Title.ToLower()))
+                            .Contains(_suggestionEntry.Title.ToLower())
+                            && (UserInfo.CurrentUser.Settings.SuggestionTimeInterval == 0 
+                            || DateTime.Now.Ticks - s.CreatedOn.Ticks < UserInfo.CurrentUser.Settings.SuggestionTimeInterval))
                         .Take(UserInfo.CurrentUser.Settings.SuggestionsCount > 0 ? UserInfo.CurrentUser.Settings.SuggestionsCount : 5)
                         .ToList();
 

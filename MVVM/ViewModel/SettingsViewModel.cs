@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,26 @@ namespace LibrarySystem.MVVM.ViewModel
         private readonly UserService _userService;
         public ICommand UpdateSettingsCommand { get; set; }
 
+        public List<string> DateIntervalSettingsList
+        {
+            get => _dateIntervalSettingsList;
+            set
+            {
+                _dateIntervalSettingsList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SelectedDateInterval
+        {
+            get => _selectedDateInterval;
+            set
+            {
+                _selectedDateInterval = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int SuggestionCount
         {
             get => _suggestionCount;
@@ -29,6 +51,10 @@ namespace LibrarySystem.MVVM.ViewModel
         public SettingsViewModel()
         {
             var lc = new LibraryContext();
+            DateIntervalSettingsList = new List<string>
+                {"Без", "Последният час", "Последният ден", "Последната седмица", "Последният месец", "Последната година"};
+
+            SelectedDateInterval = UserInfo.CurrentUser.Settings.SuggestionTimeIntervalString;
             UpdateSettingsCommand = new UpdateSettingsCommand(this);
             SuggestionCount = UserInfo.CurrentUser.Settings.SuggestionsCount;
             _userService = new UserService(new UserRepository(lc), new BookRepository(lc));
@@ -39,6 +65,8 @@ namespace LibrarySystem.MVVM.ViewModel
         private int _suggestionCount;
         private bool _hasStatus;
         private string _statusMessage;
+        private string _selectedDateInterval;
+        private List<string> _dateIntervalSettingsList;
 
         public IViewModel CurrentViewModel
         {
@@ -69,6 +97,17 @@ namespace LibrarySystem.MVVM.ViewModel
         {
             var user = UserInfo.CurrentUser;
             var settings = user.Settings;
+            settings.SuggestionTimeInterval = SelectedDateInterval switch
+            {
+                "Последният час" => (DateTime.Now.AddHours(1) - DateTime.Now).Ticks,
+                "Последният ден" => (DateTime.Now.AddDays(1) - DateTime.Now).Ticks,
+                "Последната седмица" => (DateTime.Now.AddDays(7) - DateTime.Now).Ticks,
+                "Последният месец" => (DateTime.Now.AddMonths(1) - DateTime.Now).Ticks,
+                "Последната година" => (DateTime.Now.AddYears(1) - DateTime.Now).Ticks,
+                _ => 0
+            };
+            settings.SuggestionTimeIntervalString = SelectedDateInterval;
+
             settings.SuggestionsCount = _suggestionCount;
             _userService.UpdateUserSettings(user.UserId, settings);
             HasStatus = true;

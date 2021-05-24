@@ -13,6 +13,8 @@ namespace LibrarySystem.MVVM.Model.DB
         public int SettingsId { get; set; }
         public int SuggestionsCount { get; set; }
 
+        public long SuggestionTimeInterval { get; set; }
+        public string SuggestionTimeIntervalString { get; set; }
         public Settings()
         {
         }
