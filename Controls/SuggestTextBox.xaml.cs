@@ -52,12 +52,6 @@ namespace LibrarySystem.Controls
                 typeof(SuggestTextBox),
                 new PropertyMetadata(null));
 
-        public static readonly DependencyProperty AutoCompleteProperty =
-            DependencyProperty.Register("AutoComplete",
-                typeof(bool),
-                typeof(SuggestTextBox),
-                new PropertyMetadata(false));
-
         public static readonly DependencyProperty PlaceholderProperty =
             DependencyProperty.Register("Placeholder",
                 typeof(object),
@@ -79,11 +73,6 @@ namespace LibrarySystem.Controls
         {
             get => GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
-        }
-        public object AutoComplete
-        {
-            get => GetValue(AutoCompleteProperty);
-            set => SetValue(AutoCompleteProperty, value);
         }
 
         public object ValueMember

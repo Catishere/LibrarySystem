@@ -114,10 +114,7 @@
     </Compile>
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
-    <Compile Include="DAL\BookRepository.cs" />
     <Compile Include="DAL\BookService.cs" />
-    <Compile Include="DAL\Interface\IRepository.cs" />
-    <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="DAL\UserService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

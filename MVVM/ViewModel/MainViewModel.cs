@@ -108,8 +108,7 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public MainViewModel()
         {
-            LibraryContext libraryContext = new LibraryContext();
-            _userService = new UserService(new UserRepository(libraryContext), new BookRepository(libraryContext));
+            _userService = new UserService(new LibraryContext());
             CurrentViewModelParent = this;
             CurrentViewModel = new HomeViewModel();
             HomeCommand = new NavigationCommand<HomeViewModel>(this);

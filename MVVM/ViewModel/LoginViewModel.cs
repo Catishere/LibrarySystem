@@ -83,7 +83,7 @@ namespace LibrarySystem.MVVM.ViewModel
                 new KeyValuePair<object, string>(_suggestionEntry, "Password");
             CurrentViewModelParent = this;
             CurrentViewModel = null;
-            _userService = new UserService(new UserRepository(new LibraryContext()), null);
+            _userService = new UserService(new LibraryContext());
             LoginCommand = new LoginCommand(this);
             RegisterCommand = new RegisterCommand(this);
         }

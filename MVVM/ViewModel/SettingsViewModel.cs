@@ -50,14 +50,13 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public SettingsViewModel()
         {
-            var lc = new LibraryContext();
             DateIntervalSettingsList = new List<string>
                 {"Без", "Последният час", "Последният ден", "Последната седмица", "Последният месец", "Последната година"};
 
             SelectedDateInterval = UserInfo.CurrentUser.Settings.SuggestionTimeIntervalString;
             UpdateSettingsCommand = new UpdateSettingsCommand(this);
             SuggestionCount = UserInfo.CurrentUser.Settings.SuggestionsCount;
-            _userService = new UserService(new UserRepository(lc), new BookRepository(lc));
+            _userService = new UserService(new LibraryContext());
         }
 
         private IViewModel _currentViewModel;

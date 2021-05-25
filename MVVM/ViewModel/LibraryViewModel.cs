@@ -88,9 +88,8 @@ namespace LibrarySystem.MVVM.ViewModel
 
         public LibraryViewModel()
         {
-            var libraryContext = new LibraryContext();
-            var _userService = new UserService(new UserRepository(libraryContext), new BookRepository(libraryContext));
-            _allPasswords = _userService.GetFavouritePasswords();
+            var userService = new UserService(new LibraryContext());
+            _allPasswords = userService.GetFavouritePasswords();
             _passwords = new List<string>();
             _passwordEntry = "";
             ItemKeyPair = new KeyValuePair<object, string>(_passwordEntry, "");
