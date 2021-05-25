@@ -18,6 +18,16 @@ namespace LibrarySystem.MVVM.ViewModel
         private readonly UserService _userService;
         public ICommand UpdateSettingsCommand { get; set; }
 
+        public bool AutoComplete
+        {
+            get => _autoComplete;
+            set {
+                _autoComplete = value;
+                OnPropertyChanged();
+            }
+
+        }
+
         public List<string> DateIntervalSettingsList
         {
             get => _dateIntervalSettingsList;
@@ -54,6 +64,7 @@ namespace LibrarySystem.MVVM.ViewModel
                 {"Без", "Последният час", "Последният ден", "Последната седмица", "Последният месец", "Последната година"};
 
             SelectedDateInterval = UserInfo.CurrentUser.Settings.SuggestionTimeIntervalString;
+            AutoComplete = UserInfo.CurrentUser.Settings.AutoComplete;
             UpdateSettingsCommand = new UpdateSettingsCommand(this);
             SuggestionCount = UserInfo.CurrentUser.Settings.SuggestionsCount;
             _userService = new UserService(new LibraryContext());
@@ -66,6 +77,7 @@ namespace LibrarySystem.MVVM.ViewModel
         private string _statusMessage;
         private string _selectedDateInterval;
         private List<string> _dateIntervalSettingsList;
+        private bool _autoComplete;
 
         public IViewModel CurrentViewModel
         {
@@ -106,7 +118,7 @@ namespace LibrarySystem.MVVM.ViewModel
                 _ => 0
             };
             settings.SuggestionTimeIntervalString = SelectedDateInterval;
-
+            settings.AutoComplete = _autoComplete;
             settings.SuggestionsCount = _suggestionCount;
             _userService.UpdateUserSettings(user.UserId, settings);
             HasStatus = true;

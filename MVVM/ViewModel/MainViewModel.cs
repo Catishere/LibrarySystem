@@ -21,7 +21,7 @@ namespace LibrarySystem.MVVM.ViewModel
         private List<Book> _suggestions;
         private IViewModel _currentViewModelParent;
         private readonly UserService _userService;
-        private bool _autoComplete = true;
+        private bool _autoComplete;
         private KeyValuePair<object, string> _itemKeyPair;
 
         public ICommand HomeCommand { get; set; }
@@ -47,6 +47,7 @@ namespace LibrarySystem.MVVM.ViewModel
             get => _suggestionEntry;
             set
             {
+                _autoComplete = UserInfo.CurrentUser.Settings.AutoComplete;
                 if (!_allSuggestions.Contains(value) && IsCycling
                     || Suggestions == null
                     || !Suggestions.Any())
