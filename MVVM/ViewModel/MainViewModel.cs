@@ -66,12 +66,14 @@ namespace LibrarySystem.MVVM.ViewModel
                         .Take(UserInfo.CurrentUser.Settings.SuggestionsCount > 0 ? UserInfo.CurrentUser.Settings.SuggestionsCount : 5)
                         .ToList();
 
+                var inputLengthThreshold =
+                    UserInfo.CurrentUser == null ? 3 : UserInfo.CurrentUser.Settings.InputLengthThreshold;
                 if (_autoComplete
                     && !IsCycling
                     && Suggestions != null
                     && Suggestions.Any()
                     && _suggestionEntry != null
-                    && _suggestionEntry.Title.Length >= 4)
+                    && _suggestionEntry.Title.Length >= inputLengthThreshold)
                     _suggestionEntry = Suggestions.First();
                 OnPropertyChanged();
             }

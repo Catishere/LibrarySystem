@@ -203,6 +203,7 @@
         </Setter>
     </Style>
     <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Focusable" Value="False"></Setter>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
@@ -280,7 +281,6 @@
                 <Setter Property="Padding" Value="2"/>
                 <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
             </Trigger>
-
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding 

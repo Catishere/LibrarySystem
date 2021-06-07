@@ -38,6 +38,16 @@ namespace LibrarySystem.MVVM.ViewModel
             }
         }
 
+        public int InputLengthSuggestions
+        {
+            get => UserInfo.CurrentUser.Settings.InputLengthThreshold;
+            set
+            {
+                UserInfo.CurrentUser.Settings.InputLengthThreshold = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string SelectedDateInterval
         {
             get => _selectedDateInterval;

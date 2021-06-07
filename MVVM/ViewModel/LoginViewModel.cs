@@ -169,8 +169,10 @@ namespace LibrarySystem.MVVM.ViewModel
                 OnPropertyChanged();
                 if (!_suggestions.Any()) return;
                 var first = _suggestions.First();
-                BestSuggestionUsername = SuggestionEntry?.Username?.Length >= 3 ? first.Username : string.Empty;
-                BestSuggestionPassword = SuggestionEntry?.Password?.Length >= 3 ? first.Password : string.Empty;
+                var inputLengthThreshold =
+                    UserInfo.CurrentUser == null ? 3 : UserInfo.CurrentUser.Settings.InputLengthThreshold;
+                BestSuggestionUsername = SuggestionEntry?.Username?.Length >= inputLengthThreshold ? first.Username : string.Empty;
+                BestSuggestionPassword = SuggestionEntry?.Password?.Length >= inputLengthThreshold ? first.Password : string.Empty;
             }
         }
 

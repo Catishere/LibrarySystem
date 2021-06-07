@@ -16,8 +16,10 @@ namespace LibrarySystem.MVVM.Model.DB
         public long SuggestionTimeInterval { get; set; }
         public string SuggestionTimeIntervalString { get; set; }
         public bool AutoComplete { get; set; }
+        public int InputLengthThreshold { get; set; }
         public Settings()
         {
+            InputLengthThreshold = 3;
         }
     }
 
