@@ -127,7 +127,7 @@ namespace LibrarySystem.MVVM.ViewModel
         {
             if (!Suggestions.Any()) return;
             int index = SuggestionIndex + int.Parse((string)parameter);
-            index = index % Math.Min(5, Suggestions.Count);
+            index = index % Math.Min(UserInfo.CurrentUser.Settings.SuggestionsCount, Suggestions.Count);
             IsCycling = true;
             if (index < 0)
                 index = Suggestions.Count - 1;

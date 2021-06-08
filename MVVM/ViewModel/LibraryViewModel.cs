@@ -10,6 +10,7 @@ using System.Windows.Input;
 using LibrarySystem.Core;
 using LibrarySystem.DAL;
 using LibrarySystem.MVVM.ViewModel.Command;
+using LibrarySystem.Utils;
 
 namespace LibrarySystem.MVVM.ViewModel
 {
@@ -30,7 +31,7 @@ namespace LibrarySystem.MVVM.ViewModel
         {
             if (!Passwords.Any()) return;
             int index = SuggestionIndex + int.Parse((string)parameter);
-            index = index % Math.Min(5, Passwords.Count);
+            index = index % Math.Min(UserInfo.CurrentUser.Settings.SuggestionsCount, Passwords.Count);
             IsCycling = true;
             if (index < 0)
                 index = Passwords.Count - 1;
@@ -62,7 +63,11 @@ namespace LibrarySystem.MVVM.ViewModel
                 }
                 _passwordEntry = value;
                 if (_passwordEntry != null && !IsCycling)
-                    Passwords = _allPasswords.Where(s => s.ToLower().Contains(_passwordEntry.ToLower())).ToList();
+                    Passwords = _allPasswords
+                        .Where(s => s.ToLower()
+                            .Contains(_passwordEntry.ToLower()))
+                        .Take(UserInfo.CurrentUser.Settings.SuggestionsCount > 0 ? UserInfo.CurrentUser.Settings.SuggestionsCount : 5)
+                        .ToList();
                 OnPropertyChanged();
             }
         }
