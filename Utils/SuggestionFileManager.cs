@@ -13,6 +13,9 @@ namespace LibrarySystem.Utils
         private const string filename = "logindata.dat";
         public List<UserLoginSuggestion> GetSuggestions()
         {
+            if (!File.Exists(filename))
+                File.Create(filename).Close();
+
             var data = Cryptography.Decrypt(File.ReadAllText(filename), "yolo123");
             var lines = data.Split('\n');
             List<UserLoginSuggestion> suggestions = new List<UserLoginSuggestion>();
